@@ -1,6 +1,7 @@
 numpy
-tensorflow-gpu
+tensorflow
 keras
 pillow
 sklearn
 console-progressbar
+opencv-python
