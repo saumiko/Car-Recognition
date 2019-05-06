@@ -5,3 +5,4 @@ pillow
 sklearn
 console-progressbar
 opencv-python
+google_images_download
