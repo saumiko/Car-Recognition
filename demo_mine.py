@@ -2,7 +2,7 @@
 import json
 import os
 import random
-
+import pandas
 import cv2 as cv
 import keras.backend as K
 import numpy as np
@@ -10,14 +10,25 @@ import scipy.io
 
 from utils import load_model
 
+
+def get_class_name(my_class_id):
+    column_titles = ['class_id', 'class_name']
+    data = pandas.read_csv('devkit\cars_meta.csv', encoding="utf-8")
+    dict_of_list = {}
+    for column in column_titles:
+        dict_of_list[column] = data[column].tolist()
+    for class_id, class_name in zip(dict_of_list['class_id'], dict_of_list['class_name']):
+        if my_class_id == class_id:
+            return class_name
+
+
 if __name__ == '__main__':
     img_width, img_height = 224, 224
     model = load_model()
-    model.load_weights('models/model.96-0.89.hdf5')
 
-    cars_meta = scipy.io.loadmat('devkit/cars_meta')
-    class_names = cars_meta['class_names']  # shape=(1, 196)
-    class_names = np.transpose(class_names)
+    # cars_meta = scipy.io.loadmat('devkit/cars_meta')
+    # class_names = cars_meta['class_names']  # shape=(1, 196)
+    # class_names = np.transpose(class_names)
 
     test_path = 'demoimg/'
     test_images = [f for f in os.listdir(test_path) if
@@ -38,10 +49,10 @@ if __name__ == '__main__':
         preds = model.predict(rgb_img)
         prob = np.max(preds)
         class_id = np.argmax(preds)
-        text = ('Predict: {}, prob: {}'.format(class_names[class_id][0][0], prob))
-        results.append({'label': class_names[class_id][0][0], 'prob': '{:.4}'.format(prob)})
+        # text = ('Predict: {}, prob: {}'.format(class_names[class_id][0][0], prob))
+        results.append({'label': get_class_name(class_id), 'prob': '{:.4}'.format(prob)})
         # cv.imwrite('images/{}_out.png'.format(image), bgr_img)
-        resultstr = "{:<50} {:<50} {}".format(image.replace('.jpg', ''), class_names[class_id][0][0], '{:.4}'.format(prob))
+        resultstr = "{:<50} {:<50} {}".format(image, get_class_name(class_id), '{:.4}'.format(prob))
         print(resultstr)
 
     with open('results.json', 'w') as file:
