@@ -154,7 +154,7 @@ for key, value in annotations_by_class.items():
     if len(value) > 40:
         class_names.append(key)
         prep_data(value, class_names.index(key))
-        print(key, len(value))
+        # print(key, len(value))
 
 # Write Meta Data
 header = ['class_id', 'class_name']
