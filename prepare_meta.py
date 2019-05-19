@@ -98,7 +98,7 @@ f.close()
 
 
 # Validation
-header = ['bbox_x1', 'bbox_y1', 'bbox_x2', 'bbox_y2', 'fname']
+header = ['bbox_x1', 'bbox_y1', 'bbox_x2', 'bbox_y2', 'class', 'fname']
 csvdat = [header]
 ckpt = percentage(training, len(annotations))
 for i in range(ckpt, ckpt+percentage(validation, len(annotations))):
@@ -108,6 +108,7 @@ for i in range(ckpt, ckpt+percentage(validation, len(annotations))):
         row['bbox_y1'],
         row['bbox_x2'],
         row['bbox_y2'],
+        row['class'],
         row['fname']
     ]
     csvdat.append(rowdat)
@@ -154,3 +155,5 @@ with open(output_dir + '/cars_meta.csv', 'w') as f:
     for row in csvdat:
         writer.writerow(row)
 f.close()
+
+print('Num of classes: ', len(class_names))
