@@ -87,6 +87,7 @@ def prep_data(annotations, ind):
     # Training
     csvdat = []
     ckpt = 0
+    shuffle(annotations)
     for i in range(ckpt, percentage(training, len(annotations))):
         row = annotations[i]
         rowdat = [
